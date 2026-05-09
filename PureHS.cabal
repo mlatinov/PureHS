@@ -66,7 +66,9 @@ library
         Statistics.Descriptive.Association
         Statistics.Vector.Operations
         Statistics.Models.Loss
-
+        Statistics.Probability.Distributions
+        Statistics.Probability.Information
+        
     -- Modules included in this library but not exported.
     other-modules:
         Statistics.Internal.Utils
