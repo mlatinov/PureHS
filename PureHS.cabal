@@ -68,6 +68,7 @@ library
         Statistics.Models.Loss
         Statistics.Probability.Distributions
         Statistics.Probability.Information
+        Statistics.Models.Linear
         
     -- Modules included in this library but not exported.
     other-modules:
