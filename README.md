@@ -33,35 +33,58 @@ Most statistics libraries abstract away the math. This project does the opposite
 
 ### Transforms (`Statistics.Transforms.Scaling`)
 - Min-max normalization
-- Z-score (single value)
-- Z-score (whole list)
+- Z-score (single value and over a list)
 - Cumulative sum
+
+### Vector Operations (`Statistics.Vector.Operations`)
+- Scalar multiplication
+- Vector addition and subtraction
+- Element-wise multiplication
+- L2 norm (Euclidean length)
+- Dot product
+
+### Probability — Distributions (`Statistics.Probability.Distributions`)
+- Bernoulli PMF
+- Binomial PMF
+- Poisson PMF
+- Normal PDF (single value and over a list)
+- Standard normal PDF
+- Log normal PDF (numerically stable)
+- Normal likelihood and log likelihood
+
+### Probability — Information (`Statistics.Probability.Information`)
+- Shannon entropy
+- Probability normalization
+
+### Models — Linear Regression (`Statistics.Models.Linear`)
+- Gradient descent optimizer with convergence detection
+- Divergence protection (NaN, infinity, and loss increase detection)
+- `LinearModel` record type with named slope and intercept
+- `fit` — trains a model given learning rate, epsilon, iterations, and data
+- `predict_linear` — generates predictions from a fitted model
+
+### Loss Functions (`Statistics.Models.Loss`)
+- Mean squared error (MSE)
+- Mean absolute error (MAE)
 
 ---
 
-## Installation
-
-You need GHC and Cabal. The recommended way to install both is via [GHCup](https://www.haskell.org/ghcup/):
+## Quick Start
 
 ```bash
+# Install GHC and Cabal via GHCup
 curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
-```
 
-Then clone the repo and build:
-
-```bash
+# Clone and build
 git clone https://github.com/mlatinov/PureHS.git
 cd PureHS
 cabal build
-```
 
-To explore interactively:
-
-```bash
+# Explore interactively
 cabal repl
 ```
 
-Then inside GHCi:
+### Descriptive Statistics
 
 ```haskell
 import Statistics.Descriptive.Central
@@ -70,22 +93,46 @@ import Statistics.Descriptive.Association
 
 let xs = [2.0, 4.0, 4.0, 4.0, 5.0, 5.0, 7.0, 9.0]
 
-mean xs
--- 5.0
+mean xs        -- 5.0
+sd xs          -- 2.0
+summarize xs   -- Summary {min_val = 2.0, max_val = 9.0, mean_val = 5.0, ...}
+```
 
-sd xs
--- 2.0
+### Linear Regression via Gradient Descent
 
-summarize xs
--- Summary {min_val = 2.0, max_val = 9.0, mean_val = 5.0, ...}
+```haskell
+import Statistics.Models.Linear
+
+let xs = [1.0, 2.0, 3.0, 4.0, 5.0]
+let ys = [2.0, 4.0, 6.0, 8.0, 10.0]
+
+let model = fit 0.01 0.0001 10000 xs ys
+-- LinearModel {slope = 1.991, intercept = 0.029}
+
+predict_linear model [6.0, 7.0, 8.0]
+-- [11.98, 13.97, 15.96]
+```
+
+### Probability Distributions
+
+```haskell
+import Statistics.Probability.Distributions
+
+normal_pdf_f 0.0 0.0 1.0       -- 0.3989 (standard normal at x=0)
+binomial_pmf 10 3 0.5          -- P(X=3) for Binomial(10, 0.5)
+log_normal_likelihood [1..100] 50 10  -- numerically stable log likelihood
 ```
 
 ---
 
 ## Roadmap
 
-- [ ] Linear regression (OLS)
-- [ ] Hypothesis testing (t-test, chi-square)
+- [x] Descriptive statistics
+- [x] Vector operations  
+- [x] Probability distributions
+- [x] Gradient descent linear regression
+- [ ] OLS linear regression (closed form)
+- [ ] Hypothesis testing (t-test, ANOVA, Kruskal-Wallis)
 - [ ] Bootstrap resampling
 - [ ] Bayesian inference with conjugate priors
 - [ ] MCMC — Metropolis-Hastings sampler
